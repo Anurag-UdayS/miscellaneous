@@ -1,18 +1,20 @@
 import java.util.Scanner;
 
-public class test {
+public class Library {
 
-	//Method Main, For starting the program.
+	// Method Main, For starting the program.
 	public static void main(String[] args) {
-		test _controller = new test();
+		Library _controller = new Library();
 		// Redirect program flow to a non-static method.
 		_controller._start(_controller,args);
 	}
 
-	public void _start(test _controller, String[] args){
+	public void _start(Library _controller, String[] args){
 		_controller.init(args);
 		_controller.start(args); 
 	};
+
+
 	//
 	//
 	//
@@ -30,6 +32,7 @@ public class test {
 		final String Green = "32m";
 		final String Yellow = "33m";
 		final String Cyan = "36m";
+		final String Pink = "38;5;213m";
 		//-----------------------//
 
 		String Make_Red(String str){
@@ -48,6 +51,34 @@ public class test {
 			return Base + Cyan + str + Base + Reset;
 		};
 
+		String Make_Pink(String str){
+			return Base + Pink + str + Base + Reset;
+		};
+
+		//-----------------------//
+		String Get_Red(){
+			return Base + Red;
+		};
+
+		String Get_Green(){
+			return Base + Green;
+		};
+
+		String Get_Yellow(){
+			return Base + Yellow;
+		};
+
+		String Get_Cyan(){
+			return Base + Cyan;
+		};
+
+		String Get_Pink(){
+			return Base + Pink;
+		};
+
+		String Get_Reset(){
+			return Base + Reset;
+		};
 	}
 
 	// The Response Class for collection of responses.
@@ -94,8 +125,8 @@ public class test {
 		public Response(boolean Success, String Message) {
 			this.Success = Success;
 			this.Message = Message;
-		}
-	}
+		};
+	};
 
 	// The Book Class for maintaining records of books.
 	public class Book{
@@ -111,22 +142,22 @@ public class test {
 		};
 
 		public Book(int ID, String Name, String Author, int Published, String Publisher) {
-			ID = ID;
-			Name = Name;
-			Author = Author;
-			Published = Published;
-			Publisher = Publisher;
-			Copies = 1;
-		}
+			this.ID = ID;
+			this.Name = Name;
+			this.Author = Author;
+			this.Published = Published;
+			this.Publisher = Publisher;
+			this.Copies = 1;
+		};
 
 		public Book(int ID, String Name, String Author, int Published, String Publisher, int Copies) {
-			ID = ID;
-			Name = Name;
-			Author = Author;
-			Published = Published;
-			Publisher = Publisher;
-			Copies = Copies;
-		}
+			this.ID = ID;
+			this.Name = Name;
+			this.Author = Author;
+			this.Published = Published;
+			this.Publisher = Publisher;
+			this.Copies = Copies;
+		};
 	}
 
 	// The Student Class for maintaining records of students.
@@ -157,7 +188,7 @@ public class test {
 		//
 		//
 		//
-		// ===================== Tables =====================
+		// ==================== Callouts ====================
 		//
 		//
 		//
@@ -207,12 +238,27 @@ public class test {
 				"Please enter next command to proceed.",
 				"============================================================",
 				"\t(logout) (Logout) or (0): Logout of this menu and open login screen.",
-				"\t(view) (View) or (1): View the books available in the library.",
+				"\t(view) (View) or (1): View the books registered in the library database.",
 				"\t(mybooks) (MyBooks) (my-books) (My-books) (My-Books) or (2): View books you have issued.",
 				"\t(issue) (Issue) or (3): Open Issuing Menu (for issuing books).",
 				"\t(submit) (Submit) or (4): Open Submission Menu (for submitting issued books).",
-				"\t(bookdata) (BookData) or (5): Read the details of a book."
-			}
+				"============================================================"
+			},
+			// [6] = Prompt Admin Home Screen Message.
+			{},
+
+			//----------------//
+
+			// [7] = Prompt View Books,
+			{
+				"============================================================",
+				"All registered books are shown here.",
+				"To view the details of a book, please enter it's name or ID number.",
+				"Or, enter (quit) (Quit) (home) or (Home) to return to the main-menu.",
+				"Or, enter (logout), (Logout) or (0) to logout of the machine.",
+				"============================================================",
+				"The following books are registered (Green = Available, Red = Unavailable):"
+			},
 		};
 
 
@@ -223,6 +269,25 @@ public class test {
 				System.out.println(callout);
 			}
 		};
+
+		// The Integer Checker Utility
+		public boolean isInteger(String intStr){
+			try {
+				Integer.parseInt(intStr);
+
+				// To avoid compiler error.
+				if (true) return true;
+
+			} catch (NumberFormatException n){
+
+				// To avoid compiler error.
+				if (true) return false;
+
+			};
+
+			// To avoid compiler error.
+			return false;
+		}
 		
 		//
 		//
@@ -247,26 +312,50 @@ public class test {
 			new Book(10,"Test","Auth",2021,"Pub",9),
 		}; 
 
-
-
 		// Bookshelf Methods: Get Book By ID:
-		Response getBookById(int ID){
+		Response _getBookById(int ID){
+			
 			for (Book book: Bookshelf) {
-				if (book.ID == ID) {
-					return new Response(true,"Success! Found Book.",book);
-				} 
+				if (book.ID == ID) return new Response(true,"Success! Found Book.",book);
 			}
+
 			return new Response(false,"Failure! No Book Found With Given ID.");
 		};
 
 		// Bookshelf Methods: Get Book By Name:
-		Response getBookByName(String Name){
+		Response _getBookByName(String Name){
+			
 			for (Book book: Bookshelf) {
-				if (book.Name.equals(Name)) {
-					return new Response(true,"Success! Found Book.",book);
-				} 
+				if (book.Name.equals(Name)) return new Response(true,"Success! Found Book.",book);
 			}
+
 			return new Response(false,"Failure! No Book Found With Given Name.");
+		};
+
+		// Bookshelf Methods: View Book Details:
+		void _showBookDetails(Book book, Colors colorController){
+			System.out.println("Details of the book:");
+			System.out.println(colorController.Make_Pink("\t\t (Name) = " + book.Name));
+			System.out.println("\t\t (ID) = " + Integer.toString(book.ID));
+			System.out.println("\t\t (Author) = " + book.Author);
+			System.out.println("\t\t (Year Of Publishing) = " + Integer.toString(book.Published));
+			System.out.println("\t\t (Publisher) = " + book.Publisher);
+			System.out.println("\t\t (Copies Available in the Library) = " + Integer.toString(book.Copies));
+			System.out.println(colorController.Make_Cyan("\nEOF. Returning to main menu."));
+		};
+
+		// Bookshelf Methods: Find Book:
+		Response findBook(String data){
+			
+			Response _bookByName = _getBookByName(data);
+			if (_bookByName.Success) return _bookByName;
+
+			if (!isInteger(data)) return new Response (false, "No book was found with the given name, and ID check was skipped as the number is not an Integer.");
+			
+			Response _bookById = _getBookById(Integer.parseInt(data));
+			if (_bookById.Success) return _bookById;
+
+			return new Response(false, "No book was found with the given ID.");
 		};
 
 		//
@@ -293,31 +382,28 @@ public class test {
 
 		// Database Methods: Get Student by ID:
 		Response _getStudentById(int ID){
+			
 			for (Student student: Database){
-				if (student.ID == ID) {
-					return new Response(true,"Success! Found Student.",student);
-				}
-			}
+				if (student.ID == ID) return new Response(true,"Success! Found Student.",student);
+			};
+
 			return new Response(false,"Failure! No Student Found With Given ID.");
 		};
 
 		// Database Methods: Get Student by Name:
 		Response _getStudentByName(String Name){
-			System.out.println(Name);
+						
 			for (Student student: Database){
-				if (student.Name.equals(Name)) {
-					System.out.println("Sent!");
-					return new Response(true,"Success! Found Student.",student);
-				} 
-			}
+				if (student.Name.equals(Name)) return new Response(true,"Success! Found Student.",student);
+			};
+
 			return new Response(false,"Failure! No Student Found With Given Name.");
 		};
 
 		// Database Methods: Password Check:
 		Response _checkPassword(String Password, Student student){
-			if (student.Password.equals(Password)) {
-				return new Response(true,"Password Matches.",true);
-			}
+			if (student.Password.equals(Password)) return new Response(true,"Password Matches.",true);
+
 			return new Response(false,"Failure! Password does not match.");
 		};
 
@@ -330,25 +416,26 @@ public class test {
 		//
 		//
 
-
 		// Prompts: Check Password:
 		Response promptCheckPassword(Scanner scanner, Colors colorController, Student student, int tries){
 			Callout(4);
-			System.out.print("Enter the Password for " + student.Name + "(" + Integer.toString(tries) + "tries left):");
+			System.out.print("Enter the Password for " + student.Name + "(" + Integer.toString(tries) + " tries left): ");
 			String pass = scanner.nextLine();
 
-			if (tries > 0) {
-				Response passMatch = _checkPassword(pass,student);
-				if (passMatch.Success) {
-					return new Response(true,"Matched Password!");
-				} else {
-					System.out.print(colorController.Make_Red("Password Did not match. Please retry."));
-					return promptCheckPassword(scanner, colorController, student, tries - 1);
-				}
-			} else {
-				System.out.print(colorController.Make_Red("Ran out of tries. Logging out."));
-				return new Response(false, "Ran out of tries.");
+			if (tries <= 0) {
+				System.out.println(colorController.Make_Red("Ran out of tries. Logging out."));
+				return new Response(false, "Ran out of tries while checking password.");
 			}
+
+			Response passMatch = _checkPassword(pass,student);
+			
+			if (passMatch.Success) {
+				return new Response(true,"Matched Password!");
+			} else {
+				System.out.println(colorController.Make_Red("Password Did not match. Please retry."));
+				return promptCheckPassword(scanner, colorController, student, tries - 1);
+			}
+				
 		};
 
 		// Prompts: Get Student By Name:
@@ -359,17 +446,20 @@ public class test {
 
 			Response foundStudent = _getStudentByName(name);
 
-			if (foundStudent.Success) {
-				Student student = foundStudent.response_student;
-				Response passCheck = promptCheckPassword(scanner, colorController, student, 3);
-				if (passCheck.Success) {
-					return new Response(true,"Logged in as " + student.Name + ".",student);
-				};
-
-			} else {
+			if (!foundStudent.Success) { 
 				System.out.println(colorController.Make_Red("Error! " + foundStudent.Message + " Please retry."));
 				return promptGetStudentByName(scanner, colorController);
-			}
+			};
+
+			Student student = foundStudent.response_student;
+			Response passCheck = promptCheckPassword(scanner, colorController, student, 3);
+
+			if (!passCheck.Success) {
+				System.out.println(colorController.Make_Red("Error. " + passCheck.Message + " Please retry."));
+				return promptGetStudentByName(scanner, colorController);
+			};
+			
+			return new Response(true,"Logged in as " + student.Name + ".",student);				
 		};
 
 		// Prompts: Get Student By ID:
@@ -380,17 +470,20 @@ public class test {
 
 			Response foundStudent = _getStudentById(Integer.parseInt(id));
 
-			if (foundStudent.Success) {
-				Student student = foundStudent.response_student;
-				Response passCheck = promptCheckPassword(scanner, colorController, student, 3);
-				if (passCheck.Success) {
-					return new Response(true,"Logged in as " + student.Name + ".",student);
-				};
-
-			} else {
+			if (!foundStudent.Success) {
 				System.out.println(colorController.Make_Red("Error! " + foundStudent.Message + " Please retry."));
 				return promptGetStudentById(scanner, colorController);
-			}
+			};
+
+			Student student = foundStudent.response_student;
+			Response passCheck = promptCheckPassword(scanner, colorController, student, 3);
+
+			if (!passCheck.Success) {
+				System.out.println(colorController.Make_Red("Error! " + passCheck.Message + " Please retry."));
+				return promptGetStudentById(scanner, colorController);
+			};
+			
+			return new Response(true,"Logged in as " + student.Name + ".",student);
 		};
 
 		// Prompts: Prompt Login:
@@ -434,11 +527,64 @@ public class test {
 			}
 		};
 
+		//
+		//
+		//
+		// ================ Book Management =================
+		//
+		//
+		//
 
+		// Prompts: View Books
+		Response promptViewBooks(Student student, Scanner scanner, Colors colorController){
+			Callout(7);
+			
+			for (Book book: Bookshelf) {
+				String colorChar = book.Copies >= 1 ? colorController.Get_Green():colorController.Get_Red();
+				String resetChar = colorController.Get_Reset();
+				System.out.printf("%s\t(%d) - %s\n%s", colorChar, book.ID, book.Name, resetChar);
+			};
+
+			System.out.println("============================================================");
+			System.out.print("Enter Command/ Book-name or nummber here:");
+
+			String scan = scanner.nextLine();
+
+			switch (scan) {
+				case "logout":
+					return new Response(false, "Requested Logout.","logout");
+				case "Logout":
+					return new Response(false, "Requested Logout.","logout");
+				case "0":
+					return new Response(false, "Requested Logout.","logout");
+
+				//
+				case "quit":
+					return showStudentHome(student, scanner, colorController);
+				case "Quit":
+					return showStudentHome(student, scanner, colorController);	
+				case "home":
+					return showStudentHome(student, scanner, colorController);
+				case "Home":
+					return showStudentHome(student, scanner, colorController);
+
+				//
+				default:
+					Response foundBook = findBook(scan);
+					if (foundBook.Success){
+						_showBookDetails(foundBook.response_book,colorController);
+						return promptViewBooks(student, scanner, colorController);
+					} else {
+						System.out.println(colorController.Make_Red("Failed. Reason: " + foundBook.Message));
+						return promptViewBooks(student, scanner, colorController);
+					}
+			};			
+		}
 
 		//
 		//
 		//
+		// =================== Main-Menu ====================
 		//
 		//
 		//
@@ -449,17 +595,17 @@ public class test {
 			System.out.print("Enter Command Here: ");
 			String command = scanner.nextLine();
 
-			//logout view mybooks submit issue bookdata
-
 			switch(command) {
 
 				case "logout":
-					return new Response(true, "Requested Logout.","logout");
+					return new Response(false, "Requested Logout.","logout");
 				case "Logout":
-					return new Response(true, "Requested Logout.","logout");
+					return new Response(false, "Requested Logout.","logout");
 				case "0":
-					return new Response(true, "Requested Logout.","logout");
+					return new Response(false, "Requested Logout.","logout");
 
+				//
+				//
 				case "view": 
 					return promptViewBooks(student,scanner,colorController);					
 				case "View":
@@ -467,6 +613,8 @@ public class test {
 				case "1":
 					return promptViewBooks(student,scanner,colorController);	
 
+				/*
+				// FIXME: Uncomment
 				//
 				case "mybooks":
 					return promptViewStudentBooks(student,scanner,colorController);	
@@ -494,18 +642,7 @@ public class test {
 					return promptIssueBooks(student,scanner,colorController);	
 				case "4":
 					return promptIssueBooks(student,scanner,colorController);
-
-				//
-				case "bookdata":
-					return promptViewStudentBooks(student,scanner,colorController);	
-				case "BookData":
-					return promptViewStudentBooks(student,scanner,colorController);
-				case "book-data":
-					return promptViewStudentBooks(student,scanner,colorController);
-				case "Book-Data":
-					return promptViewStudentBooks(student,scanner,colorController);
-				case "5":
-					return promptViewStudentBooks(student,scanner,colorController);
+				*/
 
 				//	
 				default:
@@ -524,7 +661,6 @@ public class test {
 	//
 
 	public void init(String[] args){
-
 	};
 
 	//
@@ -551,10 +687,9 @@ public class test {
 		if (student.ID == 0) {
 			//_methods.showAdminHome(student,scanner,colorController);
 		} else {
-			_methods.showStudentHome(student,scanner,colorController);
-		}
-
-
+			Response homeResponse = _methods.showStudentHome(student,scanner,colorController);
+			if (!homeResponse.Success && homeResponse.response_str == "logout") {start(args);}; 
+		};
 	};
 	
 }
