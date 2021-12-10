@@ -8,13 +8,13 @@ class sort {
 
 	// Stores the max, min values and indices.
 	static class values {
-		long max,min,idx_max,idx_min;
+		long idx_max,idx_min,actual_idx_max,actual_idx_min;
 
-		public values(long max, long min, long idx_max, long idk_min) {
-			this.max = max;
-			this.min = min;
+		public values(long max, long min, long idx_max, long idx_min, long actual_idx_max, long actual_idx_min) {
 			this.idx_max = idx_max;
-			this.idx_min = idk_min;
+			this.idx_min = idx_min;
+			this.actual_idx_max = actual_idx_max;
+			this.actual_idx_min = actual_idx_min;
 		}
 	}
 
@@ -79,6 +79,8 @@ class sort {
 			long min = Long.MAX_VALUE;
 			long idx_max = 0;
 			long idx_min = Long.MAX_VALUE;
+			long actual_idx_max = 0;
+			long actual_idx_min = Long.MAX_VALUE;
 
 			for (int i = 0; i <= lastIdx; i++) {
 				long[] element = asciiArr[i];
@@ -86,15 +88,17 @@ class sort {
 				if (element[1] >= max) {
 					max = element[1];
 					idx_max = element[0];
+					actual_idx_max = i;
 				} 
 
 				if (element[1] < min) {
 					min = element[1];
 					idx_min = element[0];
+					actual_idx_min = i;
 				}
 			};
 
-			return new values(max, min, idx_max, idx_min);
+			return new values(max, min, idx_max, idx_min, actual_idx_max, actual_idx_min);
 		}
 
 
@@ -110,17 +114,14 @@ class sort {
 			int i = 0;
 
 			for ( ; i < max_iter; i++) {
-				int sub = i == 0 ? 1 : i*2 + 1; // Value that will be removed from the final index for search.
 
-				values valz = getMaxAndMin(asciiArr, (len - sub));
-				int max = (int) valz.idx_max;
-				int min = (int) valz.idx_min;
+				values valz = getMaxAndMin(asciiArr, (len - i*2 - 1));
 
-				idxArr[i] = min;
-				idxArr[len - 1 - i] = max;
+				idxArr[i] = (int) valz.idx_min;
+				idxArr[len - 1 - i] = (int) valz.idx_max;
 
-				asciiArr[max] = asciiArr[len - 1];
-				asciiArr[min] = asciiArr[len - 2];
+				asciiArr[ (int) valz.actual_idx_max ] = asciiArr[len - i*2 - 1];
+				asciiArr[ (int) valz.actual_idx_min ] = asciiArr[len - i*2 - 2];
 			}
 
 			//if (!isEven) idxArr[i] = getMaxAndMin(asciiArr, asciiArr.length - i*2 - 1).idx_min;
@@ -142,6 +143,25 @@ class sort {
 			return newArr;
 		}
 
+
+
+
+
+
+		void show2dLongArray(long[][] arr) {
+			System.out.println("{");
+
+			for (long[] in_arr: arr) {
+				System.out.println("\t{");
+
+				for (long el: in_arr) {
+					System.out.printf("\t\t%d;\n",el);
+				}
+				System.out.println("\t}");
+			}
+			System.out.println("}");
+		}
+
 	}
 
 
@@ -152,13 +172,14 @@ class sort {
 		int[] idxArr = helper.getIndexArr(asciiArr);
 
 		String[] sortedArr = helper.getSortedArr(idxArr,args);
+		
+		System.out.println("-------------------------------------------");
 
 		for (int i = 0; i < sortedArr.length; i++) {
 			System.out.printf("[%d] : %s\n",i,sortedArr[i]);
 		}
 
-		/*for (String str: helper.getSortedArr(idxArr,args)) {
-			System.out.printf("%s\n",str);
-		}*/
+		System.out.println("-------------------------------------------");
+
 	}
 }
