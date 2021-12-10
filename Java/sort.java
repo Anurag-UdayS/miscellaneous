@@ -61,7 +61,7 @@ class sort {
 
 	public static void main(String[] args) {
 		Helper helper = new Helper();
-		for (long i: helper.getAsciiArr(args,100)) {
+		for (long i: helper.getAsciiArr(args,26)) {
 			System.out.printf("%d\n",i);
 		}
 	}
