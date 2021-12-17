@@ -1,0 +1,54 @@
+%YAML 1.2
+---
+# This is a sublime-syntax file for the 
+# brainfuck language, a minimalist esoteric
+# language. To link this file, the following
+# command may be used:
+#
+#   cp $path_to_this_file ~/.config/sublime-text/Packages/User/Brainfuck.sublime-syntax
+
+name: Brainfuck
+
+file_extensions:
+  - bf
+  - b
+
+scope: source.c
+
+contexts:
+  main:
+
+    # All > and < symbols should be purple, like keywords in C.
+    - match: '[<>]'
+      scope: keyword.control.c
+
+    # All + and - symbols should be orange, like numbers in C.
+    - match: '[\+\-]'
+      scope: constant.numeric.value.c
+
+    # All output symbols [.,!], should be red, like arithmetic operators in C.
+    - match: '[,!\.]'
+      scope: keyword.operator.arithmetic.c
+
+    # Loops and comments are enclosed in []. 
+
+    # If a set of braces contains anything other than the valid symbols, 
+    # it should be rendered as a comment. It should be gray, like
+    # comments in C.
+    - match: '.*[^><!,\[\+\-\.]+.*\]'
+      scope: comment.block.c
+
+    # If a set of braces contains only valid symbols,
+    # it is rendered as a loop.
+    # It should be cyan, like functions in C.
+    - match: '\['
+      scope: variable.function.c
+
+    # This is for closing a loop.
+    - match: '\]'
+      scope: variable.function.c
+
+    # Any other character is not recognized and 
+    # is considered as a comment.
+    - match: '.'
+      scope: comment.block.c
