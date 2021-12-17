@@ -116,7 +116,6 @@ end
 function pointer:StartLoop()
 	self.loopIndex = self.loopIndex + 1
 	self.loopsPos[self.loopIndex] = self.currentCodeElement
-	_debug("New Loop at:",self.loopIndex,"At position:",self.currentCodeElement)
 
 	if self.ignoreLoop then return end
 
@@ -128,7 +127,6 @@ function pointer:StartLoop()
 	
 	for i = 1,#str do
 		if not string.match(string.sub(str,i,i),"[%[%]%+%-%.,><!]") then
-			_debug("Loop Rendered as comment.")
 			self.ignoreLoop = true
 			break
 		end
@@ -144,11 +142,9 @@ function pointer:EndLoop()
 	
 	if self.loopIndex > 0 then
 		self.loopIndex = self.loopIndex - 1
-		_debug("Value of loop index decremented. Value:", self.loopIndex)
 	end
 
 	if self.loopIndex == 0 and self.ignoreLoop then
-		_debug("Loop ignoring stopped.")
 		self.ignoreLoop = false
 	end
 
@@ -200,7 +196,7 @@ function main(...)
 		toDebug = true
 	end
 
-	if string.find(code,"#debug") then
+	if string.find(code,"#step") then
 		toStepDebug = true
 	end
 
