@@ -18,7 +18,7 @@ Reused Characters: [e,t,r,a,C,I,space,:]
 [We put them in special locations, as per their ascending ASCII values.]
 [We keep byte 0 as control-byte, and byte 1 as the current-character byte.]
 
-[space,C,I,a,e,r,t,:]
+[space,C,I,a,e,r,t,:,linefeed]
 
 [We keep setting all characters gradually.]
 	space (32)[2]:
@@ -45,9 +45,9 @@ Reused Characters: [e,t,r,a,C,I,space,:]
 	: (58)[9]:
 	+[+++++>>>>>>>>>+<<<<<<<<<]>>>>>>>>>+++++++<<<<<<<<<
 
-[Debug statement(() == braces): (<)!>!>!>!>!>!>!>!>!>!>>>>>>!<<<<<<<<<<<<<<< ]
 
 [Printing out "Enter Character:"]
+
 	E (69):
 	+++[+++++++++++>+++<]>.
 
@@ -97,7 +97,7 @@ Reused Characters: [e,t,r,a,C,I,space,:]
 	>>.
 
 	space (32)[2]:
-	<<<<<<<.
+	<<<<<<<. 
 
 [Now we take a character and store it in byte 12 so that we get enough space to work.]
 [Byte 10 will be used as a control-byte.]
@@ -105,6 +105,10 @@ Reused Characters: [e,t,r,a,C,I,space,:]
 >>>>>>>>>>,<<<<<<<<<<<<
 
 [Printing out "ASCII Value: "]
+
+	linefeed (10):
+	++++++++++.[-]
+	
 	A (65)[1] is 99:
 	++++[+++++++>-<]>++.
 
