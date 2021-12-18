@@ -1,4 +1,6 @@
-[brainf 8-bit 30KB]
+@nostep
+
+[brainf 8bit 30KB]
 [###################]
 
 @debug
@@ -156,12 +158,80 @@ Reused Characters: [e,t,r,a,C,I,space,:]
 
 	Start a loop:
 	[
-		[As the control byte is active, the code runs.]
-		<<[>>>+<-<<-]
+		[Dividing the data into two cells.]
+		[
+			[As the control byte is active, the code runs.]
+			<<[->>->+<<<]>>
 
-		[If the value is 0, this is ignored, else it adds 1 to the left byte.] 
-		[<+>-<<]! [As we returned to the inactive control byte, the loop stopped.]
-		[We reactivate the control byte and resume.]
-		+>>!
+			[If the value is 0, this is ignored, else it adds 1 to the left byte.] 
+			[-<+<] [As we returned to the inactive control byte, the loop stopped.]
+			[We reactivate the control byte and resume.]
+			<<[>]+>>
+		]
+
+		[Subtract smaller cell from larger. Store smaller value in another cell.]  
+		<[->>->+<<<]
+
+		[Store the remainder 10 cells further.]
+		>>[->>>>>>>>>>+<<<<<<<<<<]
+
+		[Get back to the cell where the value is stored.]
+		>
+
+		[Move it to the previous cell.]
+		[-<+>]
+
+		[Finally, move to the previous cell as the new data cell.]
+		<<<[-]+>>
 	]
+
+	[Get to the last of the stored bits.] 
+	>>>
+	>>>>>>>>
+
+	[Add 48 to each byte. Use the byte to the right as a control-byte, and the next as the counter byte.]
+	>>++++++++
+	[
+		[Go to the control byte, subtract 1, then start loop to add 51 to the main byte.]
+		<-[-----<+>]
+
+		[Go to the main byte and subtract 3, then output.]
+		<---.
+
+		[Cleanup the main byte (for setup as control byte.)]
+		[-]
+
+		[Move to the counter byte, and remove the current count.]
+		>>-
+
+		[Start loop to move control byte to the previous byte.]
+		[-<+>]
+
+		[Finally, select previous byte as control byte.]
+		<
+	]
+
+[Cleanup, Print form-feed and start GC.]
+[-]++++++++++.
+
+Garbage Collection:
+
+[Store the. index of the next byte in itself == 25.]
+>>++++++[++++++++++<+>]<
+
+[Start a loop to go to till beginning and GC.]
+[
+	[Go to the previous byte and GC it.]
+	<[-]
+
+	[Go to the counter byte and remove the current iteration.]
+	>-
+
+	[Move the counter byte to the previous iteration.]
+
+	[-<+>]
+
+	[Finally, select the previous byte as the counter and loop.]
+	<
+]
 

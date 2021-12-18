@@ -16,7 +16,7 @@ function Compiled() {
 }
 
 function Brainfuck() {
-	lua ~/Documents/Coding/Lua/brainfCompiler.lua "$@"
+	lua ~/Documents/Coding/Lua/brainfInterpreter.lua "$@"
 }
 
 alias coding=Coding $@

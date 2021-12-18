@@ -40,9 +40,8 @@ contexts:
     # If a set of braces contains anything other than the valid symbols, 
     # it should be rendered as a comment. It should be gray, like
     # comments in C.
-    - match: '\[[><!,\+\-\.]*[^>\[\]<!,\+\-\.]+.*\]'
+    - match: '\[[^\[]*[^>\[<!,\+\-\.]+[^\[]*\]'
       scope: comment.block.c
-      #pop: true
 
     # If a set of braces contains only valid symbols,
     # it is rendered as a loop.
@@ -58,6 +57,5 @@ contexts:
     # is considered as a comment.
     - match: '.'
       scope: comment.block.c
-      pop: true
 
 ######################################## End ########################################
