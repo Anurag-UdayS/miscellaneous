@@ -13,7 +13,7 @@
 [[ $- != *i* ]] && return
 
 alias ls='ls --color=auto'
-PS1='\e[1;2;31m[\@] \e[0m\e[1;32m\u@\e[1;32m\H\e[0m:\e[1;34m\w\e[0m\e[3m$\e[0m '
+PS1='\e[1;32m\u\e[0m:\e[1;34m\w\e[0m\e[3m$\e[0m '
 
 if [ -e ~/.bashrc.aliases ] ; then
    source ~/.bashrc.aliases
