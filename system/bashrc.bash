@@ -13,7 +13,14 @@
 [[ $- != *i* ]] && return
 
 alias ls='ls --color=auto'
-PS1='\e[1;32m\u\e[0m:\e[1;34m\w\e[0m\e[3m$\e[0m '
+
+B=$(tput bold)
+I="\e[3m"
+gr=$(tput setaf 2)
+bl=$(tput setaf 4)
+R=$(tput sgr0)
+
+PS1='\['$B$gr'\]\u\['$R'\]:\['$B$bl'\]\w\['$R$I'\]\$ \['$R'\]'
 
 if [ -e ~/.bashrc.aliases ] ; then
    source ~/.bashrc.aliases
