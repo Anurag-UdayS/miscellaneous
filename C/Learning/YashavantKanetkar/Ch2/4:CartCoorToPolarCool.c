@@ -2,8 +2,7 @@
 #include <stdlib.h>
 #include <math.h>
 
-int main(int argc, char const *argv[])
-{
+int main(int argc, char const *argv[]) {
 	while (1) {
 		double x,y;
 		printf("Input Cartesian Coordinates (x, y) separated by spaces:");

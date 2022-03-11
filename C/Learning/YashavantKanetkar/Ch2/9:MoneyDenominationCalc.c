@@ -1,7 +1,6 @@
 #include <stdio.h>
 
-int main(int argc, char const *argv[])
-{
+int main(int argc, char const *argv[]) {
 	int val, total;
 
 	int deno[] = {100, 50, 10, 5, 2, 1};

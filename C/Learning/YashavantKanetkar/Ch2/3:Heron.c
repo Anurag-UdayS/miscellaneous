@@ -2,8 +2,7 @@
 #include <stdlib.h>
 #include <math.h>
  
-int main(int argc, char const *argv[])
-{
+int main(int argc, char const *argv[]) {
 	while (1) {
 		float a, b, c;
 		printf("Input the three sides of a triangle (separated by spaces):");
