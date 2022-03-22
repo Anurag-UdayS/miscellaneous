@@ -1,8 +1,7 @@
 #include <stdio.h>
 #include <math.h>
 
-int main(int argc, char const *argv[])
-{
+int main(int argc, char const *argv[]) {
 	double L1,L2,G1,G2;
 	printf("Input the values of Latitudes(Format: X Y):");
 	scanf("%lf %lf", &L1, &L2);
