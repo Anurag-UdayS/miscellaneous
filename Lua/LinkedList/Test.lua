@@ -274,3 +274,25 @@ dll:addAll {}
 assertEquals(dll:tostring(), "[]", "2.2.0.0")
 assertEquals(dll:tostringTailToHead(), "[]", "2.2.0.1")
 
+-- Test 2.2.1
+-- `DoublyLinkedList#addAll` array with elements inside empty list.
+dll = DoublyLinkedList.fromTable {}
+dll:addAll {1, 2, 3}
+assertEquals(dll:tostring(), "[1, 2, 3]", "2.2.1.0")
+assertEquals(dll:tostringTailToHead(), "[3, 2, 1]", "2.2.1.1")
+
+-- Test 2.2.2
+-- `DoublyLinkedList#addAll` empty array inside list with elements.
+dll = DoublyLinkedList.fromTable {1, 2, 3}
+dll:addAll {}
+assertEquals(dll:tostring(), "[1, 2, 3]", "2.2.2.0")
+assertEquals(dll:tostringTailToHead(), "[3, 2, 1]", "2.2.2.1")
+
+-- Test 2.2.3
+-- `DoublyLinkedList#addAll` array with elements inside list with elements.
+dll = DoublyLinkedList.fromTable {1, 2, 3}
+dll:addAll {4, 5, 6}
+assertEquals(dll:tostring(), "[1, 2, 3, 4, 5, 6]", "2.2.0.0")
+assertEquals(dll:tostringTailToHead(), "[6, 5, 4, 3, 2, 1]", "2.2.0.1")
+
+

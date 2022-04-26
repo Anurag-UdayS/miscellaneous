@@ -207,6 +207,7 @@ function DoublyLinkedList.__object:addAll(t)
 
 end
 
+-- TODO: DoublyLinkedList#addAllFrom(idx, t)
 
 function DoublyLinkedList.__object:addFirst(node)
 	if (not DoublyLinkedList.Node.isNode(node)) then
@@ -224,10 +225,7 @@ function DoublyLinkedList.__object:addFirst(node)
 end
 
 DoublyLinkedList.__object.offerFirst 	= DoublyLinkedList.__object.addFirst
-DoublyLinkedList.__object.offerLast 	= DoublyLinkedList.__object.addLast
-DoublyLinkedList.__object.offerLast 	= DoublyLinkedList.__object.addLast
-DoublyLinkedList.__object.offerLast 	= DoublyLinkedList.__object.addLast
-
+DoublyLinkedList.__object.push 		= DoublyLinkedList.__object.addFirst
 
 function DoublyLinkedList.__object:addLast(node)
 	if (not DoublyLinkedList.Node.isNode(node)) then
@@ -247,7 +245,106 @@ end
 DoublyLinkedList.__object.add 		= DoublyLinkedList.__object.addLast
 DoublyLinkedList.__object.offer 	= DoublyLinkedList.__object.addLast
 DoublyLinkedList.__object.offerLast = DoublyLinkedList.__object.addLast
-DoublyLinkedList.__object.push 		= DoublyLinkedList.__object.addLast
+
+-- I'm gonna let the GC do these two.
+function DoublyLinkedList.__object:clear()
+	self.head = nil
+	self.tail = nil
+end
+
+function DoublyLinkedList.__object:clone()
+	return DoublyLinkedList.new(self.head, self.tail) -- A shallow copy. References remain same.
+end
+
+function DoublyLinkedList.__object:contains(needle)
+	local current = self.head
+	while (current) do
+		if (current == needle or current.value == needle) then return true end
+		current = current.next
+	end
+	return false
+end
+
+-- TODO: Reverse
+function DoublyLinkedList.__object:reverse()
+	local current = self.tail
+end
+
+function DoublyLinkedList.__object:getFirst()
+	return self.head.value
+end
+
+DoublyLinkedList.__object.element 		= DoublyLinkedList.__object.getFirst 
+DoublyLinkedList.__object.peek 			= DoublyLinkedList.__object.getFirst 
+DoublyLinkedList.__object.peekFirst 	= DoublyLinkedList.__object.getFirst 
+
+function DoublyLinkedList.__object:getLast()
+	return self.tail.value
+end
+
+DoublyLinkedList.__object.peekLast 		= DoublyLinkedList.__object.getFirst 
+
+
+function DoublyLinkedList.__object:get(idx)
+	if (idx < 1) then
+		error("Index (" .. tostring(idx) .. ") is out of bounds.")
+	end
+
+	local current = self.head
+	local i = 1
+	while (current) do
+		if (idx == i) then return current.value end
+		idx = idx + 1
+		current = current.next
+	end
+	error("Index (" .. tostring(idx) .. ") is out of bounds.")
+end
+
+function DoublyLinkedList.__object:indexOf(element)
+	local current = self.head
+	local idx = 1
+	while (current) do
+		if (current == element or current.value == element) then return idx end
+		idx = idx + 1
+		current = current.next
+	end
+	return -1
+end
+
+function DoublyLinkedList.__object:lastIndexOf(element)
+	local current = self.tail
+	local idx = 1
+	while (current) do
+		if (current == element or current.value == element) then return self:size() - idx end
+		idx = idx + 1
+		current = current.prev
+	end
+	return -1
+end
+
+function DoublyLinkedList.__object:pollFirst()
+	local val = self.head.value
+	self.head = self.head.next
+	self.head.prev = nil
+	return val
+end
+
+DoublyLinkedList.__object.poll 			= DoublyLinkedList.__object.pollFirst
+DoublyLinkedList.__object.pop 			= DoublyLinkedList.__object.pollFirst
+DoublyLinkedList.__object.remove		= DoublyLinkedList.__object.pollFirst
+DoublyLinkedList.__object.removeFirst	= DoublyLinkedList.__object.pollFirst
+
+function DoublyLinkedList.__object:pollLast()
+	local val = self.tail.value
+	self.tail = self.tail.prev
+	self.tail.next = nil
+	return val
+end
+
+DoublyLinkedList.__object.removeLast = DoublyLinkedList.__object.pollLast
+
+-- TODO: RemoveAt, RemoveFirstOccurence, RemoveLastOccurence, set, toTable
+--function 
 
 
 function DoublyLinkedList.__object:size()
