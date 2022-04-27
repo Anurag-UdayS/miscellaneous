@@ -207,7 +207,6 @@ function DoublyLinkedList.__object:addAll(t)
 
 end
 
--- TODO: DoublyLinkedList#addAllFrom(idx, t)
 function DoublyLinkedList.__object:addAllFrom(idx, t)
 	if (not next(t)) then return; end
 	assert(type(t) == 'table' and t[1] ~= nil, "Table must be an array (indexed with 1).")
@@ -264,12 +263,7 @@ function DoublyLinkedList.__object:addAllFrom(idx, t)
 		i = i + 1
 		current = current.next
 	end
-
-
 end
-
-
-
 
 function DoublyLinkedList.__object:addFirst(node)
 	if (not DoublyLinkedList.Node.isNode(node)) then
