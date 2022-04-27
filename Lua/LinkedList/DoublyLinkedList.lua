@@ -281,7 +281,7 @@ function DoublyLinkedList.__object:addFirst(node)
 end
 
 DoublyLinkedList.__object.offerFirst 	= DoublyLinkedList.__object.addFirst
-DoublyLinkedList.__object.push 		= DoublyLinkedList.__object.addFirst
+DoublyLinkedList.__object.push 			= DoublyLinkedList.__object.addFirst
 
 function DoublyLinkedList.__object:addLast(node)
 	if (not DoublyLinkedList.Node.isNode(node)) then
@@ -321,9 +321,13 @@ function DoublyLinkedList.__object:contains(needle)
 	return false
 end
 
--- TODO: Reverse
 function DoublyLinkedList.__object:reverse()
-	local current = self.tail
+	if (not self.head or self.head == self.tail) then return; end -- Do not act on empty lists or lists with one element.
+	local t = self:toTable()
+	self:clear()
+	for i = #t, 1, -1 do
+		self:addLast(t[i])
+	end
 end
 
 function DoublyLinkedList.__object:getFirst()
@@ -350,7 +354,7 @@ function DoublyLinkedList.__object:get(idx)
 	local i = 1
 	while (current) do
 		if (idx == i) then return current.value end
-		idx = idx + 1
+		i = i + 1
 		current = current.next
 	end
 	error("Index (" .. tostring(idx) .. ") is out of bounds.")
@@ -369,7 +373,7 @@ end
 
 function DoublyLinkedList.__object:lastIndexOf(element)
 	local current = self.tail
-	local idx = 1
+	local idx = 0
 	while (current) do
 		if (current == element or current.value == element) then return self:size() - idx end
 		idx = idx + 1
@@ -379,10 +383,15 @@ function DoublyLinkedList.__object:lastIndexOf(element)
 end
 
 function DoublyLinkedList.__object:removeFirst()
+	if (not self.head) then return; end -- Do not do anything in empty lists
+	
 	local val = self.head.value
 	self.head = self.head.next
-	self.head.prev = nil
-	return val
+	
+	if (not self.head or not self.head.next) then self.tail = self.head end -- If only one or no element remains after removal
+	if (self.head) then self.head.prev = nil end
+	
+	return val;
 end
 
 DoublyLinkedList.__object.pollFirst		= DoublyLinkedList.__object.removeFirst
@@ -391,17 +400,100 @@ DoublyLinkedList.__object.pop 			= DoublyLinkedList.__object.removeFirst
 DoublyLinkedList.__object.remove		= DoublyLinkedList.__object.removeFirst
 
 function DoublyLinkedList.__object:removeLast()
+	if (not self.head) then return; end -- Do not do anything in empty lists
+	
 	local val = self.tail.value
 	self.tail = self.tail.prev
-	self.tail.next = nil
-	return val
+	
+	if (not self.tail or not self.tail.prev) then self.head = self.tail end -- If only one or no element remains after removal
+	if (self.tail) then self.tail.next = nil end
+	
+	return val;
 end
 
 DoublyLinkedList.__object.pollLast = DoublyLinkedList.__object.removeLast
 
--- TODO: RemoveAt, RemoveFirstOccurence, RemoveLastOccurence, set, toTable
---function 
 
+function DoublyLinkedList.__object:removeAt(idx)
+	if (idx < 1) then
+		error("Index (" .. tostring(idx) .. ") is out of bounds.")
+	end
+
+	local current = self.head
+	local i = 1
+	while (current) do
+		if (idx == i) then 
+			local val = current.value
+
+			if (current == self.head) then self.head = current.next end
+			if (current == self.tail) then self.tail = current.prev end
+			if (current.prev) then current.prev.next = current.next end
+			if (current.next) then current.next.prev = current.prev end
+			
+			return val;
+		end
+
+		i = i + 1
+		current = current.next
+	end
+	error("Index (" .. tostring(idx) .. ") is out of bounds.")
+end
+
+function DoublyLinkedList.__object:removeFirstOccurence(element)
+	local current = self.head
+	
+	while (current) do
+		if (element == current or element == current.value) then 
+			local val = current.value
+
+			if (current == self.head) then self.head = current.next end
+			if (current == self.tail) then self.tail = current.prev end
+			if (current.prev) then current.prev.next = current.next end
+			if (current.next) then current.next.prev = current.prev end
+			
+			return val;
+		end
+
+		current = current.next
+	end
+end
+
+function DoublyLinkedList.__object:removeLastOccurence(element)
+	local current = self.tail
+	
+	while (current) do
+		if (element == current or element == current.value) then 
+			local val = current.value
+
+			if (current == self.head) then self.head = current.next end
+			if (current == self.tail) then self.tail = current.prev end
+			if (current.prev) then current.prev.next = current.next end
+			if (current.next) then current.next.prev = current.prev end
+			
+			return val;
+		end
+
+		current = current.prev
+	end
+end
+
+function DoublyLinkedList.__object:set(idx, node)	
+	if (idx < 1) then
+		error("Index (" .. tostring(idx) .. ") is out of bounds.")
+	end
+
+	local current = self.head
+	local i = 1
+	while (current) do
+		if (idx == i) then 
+			current.value = DoublyLinkedList.Node.isNode(node) and node.value or node 
+			return;
+		end
+		i = i + 1
+		current = current.next
+	end
+	error("Index (" .. tostring(idx) .. ") is out of bounds.")
+end
 
 function DoublyLinkedList.__object:size()
 	local current = self.head
@@ -411,6 +503,18 @@ function DoublyLinkedList.__object:size()
 		current = current.next
 	end
 	return size;
+end
+
+function DoublyLinkedList.__object:toTable()
+	local t = {}
+	local current = self.head
+	local idx = 1
+	while (current) do
+		t[idx] = current.value
+		idx = idx + 1
+		current = current.next
+	end
+	return t;
 end
 
 --====================================================================================================--
