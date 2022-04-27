@@ -208,6 +208,68 @@ function DoublyLinkedList.__object:addAll(t)
 end
 
 -- TODO: DoublyLinkedList#addAllFrom(idx, t)
+function DoublyLinkedList.__object:addAllFrom(idx, t)
+	if (not next(t)) then return; end
+	assert(type(t) == 'table' and t[1] ~= nil, "Table must be an array (indexed with 1).")
+	
+	if (idx == 1) then
+		for i = #t, 1, -1 do
+			local node = t[i]
+
+			if (not DoublyLinkedList.Node.isNode(node)) then
+				node = DoublyLinkedList.Node.new(node)
+			end
+			self:addFirst(node)
+		end
+		return;
+	end
+
+	size = self:size()
+
+	if (idx > size + 1 or idx < 1) then
+		error("Index (" .. tostring(idx) .. ") is out of bounds.")
+	end
+
+	if (idx == size + 1) then
+		for _, node in ipairs(t) do
+			if (not DoublyLinkedList.Node.isNode(node)) then
+				node = DoublyLinkedList.Node.new(node)
+			end
+			self:addLast(node)
+		end
+		return;
+	end
+
+	local current = self.head
+	local i = 1
+
+	while (current) do
+		if (i == idx) then
+			local last = current
+			current = current.prev
+			for _, node in ipairs(t) do
+				if (not DoublyLinkedList.Node.isNode(node)) then
+					node = DoublyLinkedList.Node.new(node)
+				end
+
+				node.prev = current
+				current.next = node
+				current = node
+			end
+
+			current.next = last
+			last.prev = current
+			return;
+		end
+		i = i + 1
+		current = current.next
+	end
+
+
+end
+
+
+
 
 function DoublyLinkedList.__object:addFirst(node)
 	if (not DoublyLinkedList.Node.isNode(node)) then
@@ -246,14 +308,14 @@ DoublyLinkedList.__object.add 		= DoublyLinkedList.__object.addLast
 DoublyLinkedList.__object.offer 	= DoublyLinkedList.__object.addLast
 DoublyLinkedList.__object.offerLast = DoublyLinkedList.__object.addLast
 
--- I'm gonna let the GC do these two.
+-- I'm gonna let the GC do this.
 function DoublyLinkedList.__object:clear()
 	self.head = nil
 	self.tail = nil
 end
 
 function DoublyLinkedList.__object:clone()
-	return DoublyLinkedList.new(self.head, self.tail) -- A shallow copy. References remain same.
+	return DoublyLinkedList.fromDoublyLinkedList(self) -- A shallow copy. References remain same.
 end
 
 function DoublyLinkedList.__object:contains(needle)
@@ -322,26 +384,26 @@ function DoublyLinkedList.__object:lastIndexOf(element)
 	return -1
 end
 
-function DoublyLinkedList.__object:pollFirst()
+function DoublyLinkedList.__object:removeFirst()
 	local val = self.head.value
 	self.head = self.head.next
 	self.head.prev = nil
 	return val
 end
 
-DoublyLinkedList.__object.poll 			= DoublyLinkedList.__object.pollFirst
-DoublyLinkedList.__object.pop 			= DoublyLinkedList.__object.pollFirst
-DoublyLinkedList.__object.remove		= DoublyLinkedList.__object.pollFirst
-DoublyLinkedList.__object.removeFirst	= DoublyLinkedList.__object.pollFirst
+DoublyLinkedList.__object.pollFirst		= DoublyLinkedList.__object.removeFirst
+DoublyLinkedList.__object.poll 			= DoublyLinkedList.__object.removeFirst
+DoublyLinkedList.__object.pop 			= DoublyLinkedList.__object.removeFirst
+DoublyLinkedList.__object.remove		= DoublyLinkedList.__object.removeFirst
 
-function DoublyLinkedList.__object:pollLast()
+function DoublyLinkedList.__object:removeLast()
 	local val = self.tail.value
 	self.tail = self.tail.prev
 	self.tail.next = nil
 	return val
 end
 
-DoublyLinkedList.__object.removeLast = DoublyLinkedList.__object.pollLast
+DoublyLinkedList.__object.pollLast = DoublyLinkedList.__object.removeLast
 
 -- TODO: RemoveAt, RemoveFirstOccurence, RemoveLastOccurence, set, toTable
 --function 
@@ -379,6 +441,10 @@ function DoublyLinkedList.new(head, tail)
 
 	return setmetatable({head = head, tail = tail}, DoublyLinkedList.__meta);
 end	
+
+function DoublyLinkedList.fromDoublyLinkedList(dll)
+	return setmetatable({head = dll.head, tail = dll.tail}, DoublyLinkedList.__meta);
+end
 	
 function DoublyLinkedList.fromTable(t)
 	if (not next(t)) then return DoublyLinkedList.new(); end
