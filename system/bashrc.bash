@@ -32,7 +32,7 @@ fi
 
 # ---> Added by Cnchi RebornOS Installer Gnome based <--- #
 BROWSER=/usr/bin/brave
-EDITOR=/usr/bin/nano
+EDITOR=/usr/bin/vim
 # ---> End added by Cnchi RebornOS Installer Gnome based <--- #
 
 ######################################## End ########################################
