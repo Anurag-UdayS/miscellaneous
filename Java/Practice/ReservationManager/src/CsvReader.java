@@ -11,12 +11,12 @@ public class CsvReader {
 	public static List<Property> readPropertiesFromCSV(String fileName) throws java.io.IOException {
 		return new BufferedReader(new FileReader(fileName))
 			.lines()
-			.filter(e -> e.split(",")[5].matches("^\\d+$"))
+			.skip(1)
 			.map(e -> createProperty(e.split(",")))
 			.collect(Collectors.toList());
 	}
 
-	public static Property createProperty(String[] data) {
+	private static Property createProperty(String[] data) {
 		String property = data[0];
 		String location = data[1];
 		String description = data[2];

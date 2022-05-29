@@ -13,18 +13,18 @@ public record Property(String property, String location, String description, Str
 	public String toString(long nights) {
 		float[] data = calculatePrice(nights);
 
-		StringBuilder sb = new StringBuilder();
-		sb.append("%-26s:\t%s hosted by%s\n"); // Property, Host
-		sb.append("%-26s:\t%s\n"); // Place Type
-		sb.append("%-26s:\t%s\n"); // Location
-		sb.append("%-26s:\t%.1f\n"); // Rating
-		sb.append("%-26s:\t%s\n"); // Description
-		sb.append("%-26s:\t%d\n"); // Number of Guests
-		sb.append("%-26s:\t$%.2f\t($%.2f * %d nights)\n"); // Price	(price * n nights)
-		sb.append("%-26s:\t$%.2f\t($%.2f * %d nights)\n"); // Discounted Price	(d_price * n nights)
-		sb.append("%-26s:\t$%.2f\t($%.2f * %d nights)\n"); // Service Fee	(s_fee * n nights)
-		sb.append("%-26s:\t$%.2f\n"); // Cleaning Fee
-		sb.append("%-26s:\t$%.2f\n"); // Total Fee
+		StringBuilder sb = new StringBuilder() 
+		.append("%-26s:\t%s hosted by %s\n")  // Property, Host
+		.append("%-26s:\t%s\n") // Place Type
+		.append("%-26s:\t%s\n") // Location
+		.append("%-26s:\t%.1f\n") // Rating
+		.append("%-26s:\t%s\n") // Description
+		.append("%-26s:\t%d\n") // Number of Guests
+		.append("%-26s:\t$%.2f\t($%.2f * %d nights)\n") // Price	(price * n nights)
+		.append("%-26s:\t$%.2f\t($%.2f * %d nights)\n") // Discounted Price	(d_price * n nights)
+		.append("%-26s:\t$%.2f\t($%.2f * %d nights)\n") // Service Fee	(s_fee * n nights)
+		.append("%-26s:\t$%.2f\n") // Cleaning Fee
+		.append("%-26s:\t$%.2f\n"); // Total Fee
 
 		
 		return String.format(sb.toString(),

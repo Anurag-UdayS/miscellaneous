@@ -17,10 +17,10 @@ import java.time.format.DateTimeFormatter;
 // This class is responsible for the functioning of the menu system
 public class Menu {
 
-	private ArrayList<Supplier<List<Property>>> mainMethods;
+	private ArrayList<Supplier<List<Property>>> mainMethods = new ArrayList<>();
 	private List<Property> properties;
 
-	Reservation reservation;
+	private Reservation reservation;
 
 	private String name;
 
@@ -32,7 +32,6 @@ public class Menu {
 		this.name = name;
 
 		properties = CsvReader.readPropertiesFromCSV("../assets/Melbnb.csv");
-		mainMethods = new ArrayList<>();
 
 		mainMethods.add(this::location);
 		mainMethods.add(this::placeType);

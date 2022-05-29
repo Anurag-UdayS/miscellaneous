@@ -5,7 +5,7 @@ package hotel;
 class Main {
 
 	public static void main(String[] args) throws Exception {
-		new Menu("Melbnb").run();
+		new Menu("Deccan Palace").run();
 	}
 
 }

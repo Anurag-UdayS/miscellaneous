@@ -69,13 +69,12 @@ public class PrinterUtil {
 
 	public static String getMenu(String[] menu) {
 		StringBuilder sb = new StringBuilder();
-		for (int i = 0; i < menu.length; i++) {
-			sb.append("\t");
-			sb.append(i + 1);
-			sb.append(") ");
-			sb.append(menu[i]);
-			sb.append("\n");
-		}
+		for (int i = 0; i < menu.length; i++) 
+			sb.append("\t")
+				.append(i + 1)
+				.append(") ")
+				.append(menu[i])
+				.append("\n");
 		return sb.toString(); 
 	}
 

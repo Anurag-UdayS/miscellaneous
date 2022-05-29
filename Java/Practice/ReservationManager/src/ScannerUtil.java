@@ -5,6 +5,9 @@ import java.util.NoSuchElementException;
 import java.util.function.Predicate;
 
 public class ScannerUtil {
+	// Date		: 3[0-1]|[1-2]\\d|0[1-9] 
+	// Month	: 1[0-2]|0[1-9]
+	// Year		: \\d{4}
 	private static final String dateRegex = "^(3[0-1]|[1-2]\\d|0[1-9])/(1[0-2]|0[1-9])/(\\d{4})$";
 
 	private static final Scanner sc = new Scanner(System.in);
@@ -74,8 +77,8 @@ public class ScannerUtil {
 	}
 
 	public static float nextValidFloat(String prompt, String err, Predicate<Float> checker) {
-		float d = nextValidFloat(prompt, err);
-		if (checker.test(d)) return d;
+		float f = nextValidFloat(prompt, err);
+		if (checker.test(f)) return f;
 		System.out.println(err);
 		return nextValidFloat(prompt, err, checker);
 	}
